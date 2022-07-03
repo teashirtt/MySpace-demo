@@ -11,7 +11,7 @@
             <label for="password" class="form-label">密码</label>
             <input type="password" class="form-control" id="password" v-model="password">
           </div>
-          <div class="error-message">{{errormessage}}</div>
+          <div class="error-message">{{ errormessage }}</div>
           <button type="submit" class="btn btn-primary">登录</button>
         </form>
       </div>
@@ -22,6 +22,7 @@
 <script>
 import ContentBase from '../components/ContentBase';
 import { ref } from 'vue';
+import { useStore } from 'vuex';
 
 export default {
   name: 'LoginView',
@@ -29,11 +30,22 @@ export default {
     ContentBase,
   },
   setup() {
+    const store = useStore();
     let username = ref('');
     let password = ref('');
     let errormessage = ref('');
+
     const login = () => {
-      console.log(username.value, password.value);
+      store.dispatch("login", {
+        username: username.value,
+        password: password.value,
+        success() {
+          console.log("success");
+        },
+        error() {
+          console.log("failed");
+        }
+      })
     }
 
     return {
